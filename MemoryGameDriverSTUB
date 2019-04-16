@@ -1,0 +1,9 @@
+import java.util.*;
+
+class MemoryGameDriver{
+   public static void main(String argv[]){
+      Scanner sc = new Scanner(System.in); 
+   
+      MemoryGame mg = new MemoryGame(); 
+   } // main
+} // class
