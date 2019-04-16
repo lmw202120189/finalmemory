@@ -5,8 +5,8 @@ class MemoryDriver{
    public static void main(String argv[]){
    Scanner input = new Scanner(System.in); 
    Instruction();
-   public int choice1 = 0; 
-   public int choice2 = 0; 
+   int choice1 = 0; 
+   int choice2 = 0; 
    int turn = 0; 
    int match = 0; 
    MemoryGame mg = new MemoryGame(); 
@@ -32,8 +32,6 @@ class MemoryDriver{
    }
    //intro
    
-   static Player(){
-   }
-   //player 
+   
 }//class 
    
