@@ -16,7 +16,7 @@ import javafx.geometry.Insets;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.text.TextAlignment;
-import java.util.Random;
+import java.util.*;
 
 
 public class MemoryGameGUI extends Application
@@ -106,6 +106,36 @@ public class MemoryGameGUI extends Application
          }
          if(r==1){
             i = 1;};
+       }
+       return(imagegrid);
+       
+   }
+   
+   ImageView[][] makeRandomImageGrid(){
+      ImageView[][] imagegrid = new ImageView [4][4];
+      
+      int img = 0;
+      
+      List<Integer> imageorder = new ArrayList<>(16);
+      for (int i = 0; i < 16; i++){
+         if(i<8){
+            img = i+1;
+            imageorder.add(img);
+         }else{
+            img = i-7;
+            imageorder.add(img);
+         }
+      }
+      Collections.shuffle(imageorder);
+      
+      int order = 0;
+      for(int r=0;r<4;r++){
+         for(int c=0;c<4;c++){
+            imagegrid[r][c] = new ImageView(new Image("file:"+imageorder.get(order)+".png"));
+            imagegrid[r][c].setFitWidth(100);
+            imagegrid[r][c].setFitHeight(100);
+            order++;
+         }
        }
        return(imagegrid);
        
