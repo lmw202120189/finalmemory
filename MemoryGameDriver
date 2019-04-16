@@ -5,21 +5,21 @@ class MemoryDriver{
    public static void main(String argv[]){
    Scanner input = new Scanner(System.in); 
    Instruction();
-   int choice1 = 0; 
-   int choice2 = 0; 
+   int row = 0; 
+   int column = 0; 
    int turn = 0; 
    int match = 0; 
    MemoryGame mg = new MemoryGame(); 
    mg.setUp();
    
-      if(mg.isValidInput(choice1) && mg.isValidInput(choice2)){
+      if(!mg.isValidInput[row][column]){
          
-         while(!mg.isWinner() && gg.getMatch()<8){
+         while(!mg.isWinner() && mg.getMatch()<8){
          //CHANGE GET MATCH INTO WHATEVER THE BACKEND FUNCTION IS!!!!!!
-            System.out.println("Pick one: "); 
-            choice1 = input.nextInt();
-            System.out.println("Pick another: "); 
-            choice2 = input.next.Int();
+            System.out.println("Row: "); 
+            row = input.nextInt();
+            System.out.println("Column: "); 
+            column = input.nextInt();
        } //while  
       } //if
       else{
