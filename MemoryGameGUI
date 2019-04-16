@@ -1,0 +1,150 @@
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
+import javafx.scene.paint.Color; 
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.text.Font;
+import javafx.geometry.Insets;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+import javafx.scene.text.TextAlignment;
+import java.util.Random;
+
+
+public class MemoryGameGUI extends Application
+{
+   GridPane grid;
+   ImageView [][] images;
+   Button [][] board;
+   Label resultLabel;
+   Button flipcards;
+   
+   public static void main(String[] args)
+   {
+      // Launch the application.
+      launch(args);
+   }
+   
+   @Override
+   public void start(Stage stage)
+   {
+     
+      grid = makeBoard();
+      
+      images = makeImageGrid();
+      
+      ImageView header = new ImageView("file:title.png");
+      
+      Label spacer = new Label("  ");
+      spacer.setFont(Font.font("Helvetica",35)); 
+      
+      Label spacer2 = new Label("  ");
+      spacer2.setFont(Font.font("Helvetica",25));
+      
+      Label spacer3 = new Label("  ");
+      spacer3.setFont(Font.font("Helvetica",40));
+      
+      ImageView flipimg = new ImageView("file:flip.png");
+      flipcards = new Button("",flipimg);
+      flipcards.setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");
+      
+      VBox vbox = new VBox(header,spacer,grid,spacer2,flipcards);
+      vbox.setAlignment(Pos.CENTER);
+      vbox.setStyle("-fx-background-color: #F4E1E6");
+      
+      Scene scene = new Scene(vbox,800,1000); //create scene
+      
+      stage.setScene(scene); //set scene
+     
+      stage.setTitle("Memory Game"); //set title
+      
+      stage.show(); //show window
+   }
+   
+   GridPane makeBoard(){
+   
+      GridPane tempgrid = new GridPane();
+      
+      tempgrid.setVgap(15);
+      tempgrid.setHgap(15);
+      tempgrid.setAlignment(Pos.CENTER);
+      
+      board = new Button [4][4];
+      for(int r=0;r<4;r++){
+         for(int c=0;c<4;c++){
+            board[r][c] = new Button("");
+            board[r][c].setOnAction(new GridHandler());
+            board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
+            board[r][c].setPrefWidth(120);
+            board[r][c].setPrefHeight(120);
+            tempgrid.add(board[r][c],c,r);
+         }
+      }
+      
+      return tempgrid;
+   
+   }
+   
+   ImageView[][] makeImageGrid(){
+      ImageView[][] imagegrid = new ImageView [4][4];
+      int i = 1;
+      
+      for(int r=0;r<4;r++){
+         for(int c=0;c<4;c++){
+            imagegrid[r][c] = new ImageView(new Image("file:"+i+".png"));
+            imagegrid[r][c].setFitWidth(100);
+            imagegrid[r][c].setFitHeight(100);
+            i++;
+         }
+         if(r==1){
+            i = 1;};
+       }
+       return(imagegrid);
+       
+   }
+   
+   Label makeLabel(String s){
+   
+      Label templabel = new Label(s);
+      templabel.setTextFill(Color.web("#258EA6"));
+      templabel.setFont(Font.font("Didact Gothic",40));
+      return templabel;
+   }
+   
+   class GridHandler implements EventHandler<ActionEvent>
+   {
+      @Override
+      public void handle(ActionEvent event)
+      {
+         int row = 5;
+         int column = 5;
+         for(int r=0;r<4;r++){
+            for(int c=0;c<4;c++){
+               if(event.getSource().equals(board[r][c])){
+                  row = r;
+                  column = c;
+               }
+               
+            }
+          }
+          
+          board[row][column] = new Button("", images[row][column]); 
+          board[row][column].setPrefWidth(120);
+          board[row][column].setPrefHeight(120);
+          board[row][column].setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");     
+          grid.add(board[row][column],column,row); 
+          
+        
+        }
+
+   }
+
+}
