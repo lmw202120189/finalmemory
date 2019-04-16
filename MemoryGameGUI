@@ -37,9 +37,9 @@ public class MemoryGameGUI extends Application
    public void start(Stage stage)
    {
      
-      grid = makeBoard();
+      grid = makeBoard(); //board of buttons for game
       
-      images = makeImageGrid();
+      images = makeImageGrid(); //board of matching images -> not currently randomized
       
       ImageView header = new ImageView("file:title.png");
       
@@ -52,7 +52,7 @@ public class MemoryGameGUI extends Application
       Label spacer3 = new Label("  ");
       spacer3.setFont(Font.font("Helvetica",40));
       
-      ImageView flipimg = new ImageView("file:flip.png");
+      ImageView flipimg = new ImageView("file:flip.png"); //button to flip card over -> currently doesn't do anything
       flipcards = new Button("",flipimg);
       flipcards.setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");
       
@@ -95,7 +95,7 @@ public class MemoryGameGUI extends Application
    
    ImageView[][] makeImageGrid(){
       ImageView[][] imagegrid = new ImageView [4][4];
-      int i = 1;
+      int i = 1; //the images are name 1 through 8 so i is used to import them
       
       for(int r=0;r<4;r++){
          for(int c=0;c<4;c++){
