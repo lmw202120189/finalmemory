@@ -58,11 +58,11 @@ public class MemoryGameVarGUI extends Application
       small.setStyle("-fx-text-fill: #D34C6E");
       small.setFont(Font.font("Glacial Indifference", 25));
       
-      medium = new RadioButton("MEDIUM (3x3)");
+      medium = new RadioButton("MEDIUM (4x4)");
       medium.setStyle("-fx-text-fill: #D34C6E");
       medium.setFont(Font.font("Glacial Indifference", 25));
       
-      large = new RadioButton("LARGE (4x4)");
+      large = new RadioButton("LARGE (6x6)");
       large.setStyle("-fx-text-fill: #D34C6E");
       large.setFont(Font.font("Glacial Indifference", 25));
       
@@ -120,8 +120,8 @@ public class MemoryGameVarGUI extends Application
       // board made with sizes from radio buttons
       GridPane tempgrid = new GridPane();
       
-      tempgrid.setVgap(15);
-      tempgrid.setHgap(15);
+      tempgrid.setVgap(10);
+      tempgrid.setHgap(10);
       tempgrid.setAlignment(Pos.CENTER);
       
       board = new Button [sizechoice][sizechoice];
@@ -130,8 +130,8 @@ public class MemoryGameVarGUI extends Application
             board[r][c] = new Button("");
             board[r][c].setOnAction(new GridHandler());
             board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
-            board[r][c].setPrefWidth(120);
-            board[r][c].setPrefHeight(120);
+            board[r][c].setPrefWidth(80);
+            board[r][c].setPrefHeight(80);
             tempgrid.add(board[r][c],c,r);
          }
       }
@@ -145,18 +145,14 @@ public class MemoryGameVarGUI extends Application
       ImageView[][] imagegrid = new ImageView [sizechoice][sizechoice];
       
       int img = 0;
-      int sizechoice = 3;
       int sc = sizechoice*sizechoice; //total amt of images needed
-      int schalf = sc/2; //for loop
 
       List<Integer> imageorder = new ArrayList<>(sc); //makes list w pairs of number for board size
-      for (int i = 0; i < sc; i++){
-         if(i<schalf){
-            img = i+1;
-            imageorder.add(img);
-         }else{
-            img = i-(schalf-1);
-            imageorder.add(img);
+      for(int x = 0; x<2; x++){
+         img = 0;
+         for (int i = 0; i < (sc/2); i++){
+               img = i+1;
+               imageorder.add(img);
          }
       } 
       Collections.shuffle(imageorder); //shuffles pairs to randomize
@@ -165,8 +161,8 @@ public class MemoryGameVarGUI extends Application
       for(int r=0;r<sizechoice;r++){ //makes grid w images from random numbers
          for(int c=0;c<sizechoice;c++){
             imagegrid[r][c] = new ImageView(new Image("file:"+imageorder.get(order)+".png"));
-            imagegrid[r][c].setFitWidth(100);
-            imagegrid[r][c].setFitHeight(100);
+            imagegrid[r][c].setFitWidth(60);
+            imagegrid[r][c].setFitHeight(60);
             order++;
          }
        }
@@ -201,8 +197,8 @@ public class MemoryGameVarGUI extends Application
           }
           
           board[row][column] = new Button("", images[row][column]); 
-          board[row][column].setPrefWidth(120);
-          board[row][column].setPrefHeight(120);
+          board[row][column].setPrefWidth(80);
+          board[row][column].setPrefHeight(80);
           board[row][column].setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");     
           grid.add(board[row][column],column,row); 
           
@@ -221,10 +217,10 @@ public class MemoryGameVarGUI extends Application
             sizechoice = 2; //2x2 board
          
          if (medium.isSelected())
-            sizechoice = 3; //3x3 board
+            sizechoice = 4; //3x3 board
          
          if (large.isSelected())
-            sizechoice = 4; //4x4 board
+            sizechoice = 6; //4x4 board
             
          grid = makeBoard(); //makes them for the correct size board
          images = makeImageGrid();
