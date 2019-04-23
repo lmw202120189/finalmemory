@@ -5,26 +5,27 @@ class MemoryDriver{
    public static void main(String argv[]){
    Scanner input = new Scanner(System.in); 
    Instruction();
-   int row = 0; 
-   int column = 0; 
-   int turn = 0; 
-   int match = 0; 
    MemoryGame mg = new MemoryGame(); 
    mg.setUp();
+   int row = 0; 
+   int column = 0; 
+   int choice [] = new int [2];
+   int turn = mg.getTurnCnt(); 
+    
    
-      if(!mg.isValidInput[row][column]){
-         
-         while(!mg.isWinner() && mg.getMatch()<8){
+   
+      while(!mg.isWinner()&&mg.isValidInput(choice)){
          //CHANGE GET MATCH INTO WHATEVER THE BACKEND FUNCTION IS!!!!!!
             System.out.println("Row: "); 
             row = input.nextInt();
+            choice[0]=row;
             System.out.println("Column: "); 
             column = input.nextInt();
-       } //while  
-      } //if
-      else{
-         System.out.println("Invalid!"); 
-      }
+            choice[1] = column;
+            mg.takeTurn(choice);
+            turn++; 
+      } //while  
+                
 } //main 
    
    static void Instruction(){
