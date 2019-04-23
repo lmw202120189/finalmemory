@@ -105,6 +105,7 @@ public class MemoryGameVarGUI extends Application
       ImageView flipimg = new ImageView("file:flip.png");
       flipcards = new Button("",flipimg);
       flipcards.setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");
+      flipcards.setOnAction(new FlipButtonHandler());
       
       Scene scene = new Scene(vbox,800,1000); //create scene
       
@@ -238,6 +239,25 @@ public class MemoryGameVarGUI extends Application
        }
        
     }
+    
+    class FlipButtonHandler implements EventHandler<ActionEvent>
+    {
+      @Override
+      public void handle(ActionEvent event)
+      {
+         for(int r=0;r<sizechoice;r++){
+         for(int c=0;c<sizechoice;c++){
+            board[r][c] = new Button("");
+            board[r][c].setOnAction(new GridHandler());
+            board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
+            board[r][c].setPrefWidth(80);
+            board[r][c].setPrefHeight(80);
+            grid.add(board[r][c],c,r);
+         }
+      }
+
+      }
+   }
 
 
 }
