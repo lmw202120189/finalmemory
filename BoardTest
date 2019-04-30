@@ -1,0 +1,38 @@
+import java.util.*;
+
+class BoardTest{
+   public static void main(String argv[]){
+   
+      int sizechoice = 4;
+      
+      int[][] board = new int [sizechoice][sizechoice];
+      
+      int sc = sizechoice*sizechoice; //total amt of images needed
+
+      List<Integer> boardnumbers = new ArrayList<>(sc); //makes list w pairs of number for board size
+      for(int x = 0; x<2; x++){
+         for (int i = 0; i < (sc/2); i++){
+               boardnumbers.add(i);
+         }
+      } 
+      Collections.shuffle(boardnumbers); //shuffles pairs to randomize
+      
+      int order = 0;
+      for(int r=0;r<sizechoice;r++){ //makes grid w images from random numbers
+         for(int c=0;c<sizechoice;c++){
+            board[r][c] = boardnumbers.get(order);;
+            order++;
+         }
+       }
+       
+       for(int r=0;r<sizechoice;r++){ //makes grid w images from random numbers
+         for(int c=0;c<sizechoice;c++){
+            System.out.print(board[r][c]);
+         }
+         System.out.print("\n");
+       }
+
+
+   }
+     
+}
