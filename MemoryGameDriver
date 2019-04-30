@@ -10,19 +10,23 @@ class MemoryDriver{
    int row = 0; 
    int column = 0; 
    int choice [] = new int [2];
-   int turn = mg.getTurnCnt(); 
+   int turn = mg.getTurnCount();
     
-   
-   
-      while(!mg.isWinner()&&mg.isValidInput(choice)){
-         //CHANGE GET MATCH INTO WHATEVER THE BACKEND FUNCTION IS!!!!!!
+  
+     System.out.println("Choose your board [2x2] [4x4] [6x6] (Insert 2,4,6 only)"); 
+     int boardChoice = input.nextInt();
+     while(!mg.isWinner()&&mg.isValidInput(choice)&&mg.isValidBoard(boardChoice)){
+            mg.initializeBoard(boardChoice);
+            mg.printGrid(boardChoice);
+            System.out.println("Now please choose the row of the symbols"); //guide
             System.out.println("Row: "); 
             row = input.nextInt();
             choice[0]=row;
+            System.out.println("Now please choose the column of the symbols"); //guide
             System.out.println("Column: "); 
             column = input.nextInt();
             choice[1] = column;
-            mg.takeTurn(choice);
+            //mg.takeTurn(choice);
             turn++; 
       } //while  
                 
