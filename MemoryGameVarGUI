@@ -37,6 +37,7 @@ public class MemoryGameVarGUI extends Application
    VBox sizestuff;
    Label spacer;
    Label spacer2;
+   int [][] intboard;
    
    public static void main(String[] args)
    {
@@ -54,15 +55,21 @@ public class MemoryGameVarGUI extends Application
       promptLabel.setFont(Font.font("Glacial Indifference", 35));
       
       // different size radio buttons
-      small = new RadioButton("SMALL (2x2)");
+      small = new RadioButton(" SMALL  (2x2) ");
+      small.getStyleClass().remove("radio-button");
+      small.getStyleClass().add("toggle-button");
       small.setStyle("-fx-text-fill: #D34C6E");
       small.setFont(Font.font("Glacial Indifference", 25));
       
       medium = new RadioButton("MEDIUM (4x4)");
-      medium.setStyle("-fx-text-fill: #D34C6E");
+      medium.getStyleClass().remove("radio-button");
+      medium.getStyleClass().add("toggle-button");
+      //medium.setStyle("-fx-text-fill: #D34C6E; -fx-background-color: #7C5962");
       medium.setFont(Font.font("Glacial Indifference", 25));
       
-      large = new RadioButton("LARGE (6x6)");
+      large = new RadioButton(" LARGE  (6x6) ");
+      large.getStyleClass().remove("radio-button");
+      large.getStyleClass().add("toggle-button");
       large.setStyle("-fx-text-fill: #D34C6E");
       large.setFont(Font.font("Glacial Indifference", 25));
       
@@ -141,6 +148,23 @@ public class MemoryGameVarGUI extends Application
    
    }
    
+   int [][] createIntBoard(){
+      
+      int total = (sizechoice * sizechoice) + 1;
+      int [][] temp = new int [sizechoice][sizechoice];
+      
+      int order = 1;
+      
+      for(int r=0;r<sizechoice;r++){
+         for(int c=0;c<sizechoice;c++){
+            temp[r][c] = order;
+            order++;
+         }
+       }
+       
+       return(temp);
+   }
+
    ImageView[][] makeImageGrid(){
       
       ImageView[][] imagegrid = new ImageView [sizechoice][sizechoice];
@@ -222,7 +246,8 @@ public class MemoryGameVarGUI extends Application
          
          if (large.isSelected())
             sizechoice = 6; //4x4 board
-            
+         
+         intboard = createIntBoard(); 
          grid = makeBoard(); //makes them for the correct size board
          images = makeImageGrid();
          
