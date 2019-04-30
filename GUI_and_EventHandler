@@ -1,6 +1,5 @@
-//this code compiles, but fails in many ways
-//this is also just the GUI code with event handlers that are supposed to flip the images back over
-//it does not exactly work yet
+// the large grid still has the weird glitch where 
+// the bottom right picture flips over without being clicked
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -42,6 +41,8 @@ public class MemoryGameVarGUI extends Application
    Label spacer2;
    Button [] ClckBtns;
    Button [][] WinBtns;
+   int clicks;
+   int clickdiv;
    
    public static void main(String[] args)
    {
@@ -63,11 +64,11 @@ public class MemoryGameVarGUI extends Application
       small.setStyle("-fx-text-fill: #D34C6E");
       small.setFont(Font.font("Glacial Indifference", 25));
       
-      medium = new RadioButton("MEDIUM (3x3)");
+      medium = new RadioButton("MEDIUM (4x4)");
       medium.setStyle("-fx-text-fill: #D34C6E");
       medium.setFont(Font.font("Glacial Indifference", 25));
       
-      large = new RadioButton("LARGE (4x4)");
+      large = new RadioButton("LARGE (6x6)");
       large.setStyle("-fx-text-fill: #D34C6E");
       large.setFont(Font.font("Glacial Indifference", 25));
       
@@ -126,8 +127,8 @@ public class MemoryGameVarGUI extends Application
       // board made with sizes from radio buttons
       GridPane tempgrid = new GridPane();
       
-      tempgrid.setVgap(15);
-      tempgrid.setHgap(15);
+      tempgrid.setVgap(10);
+      tempgrid.setHgap(10);
       tempgrid.setAlignment(Pos.CENTER);
       
       board = new Button [sizechoice][sizechoice];
@@ -136,8 +137,8 @@ public class MemoryGameVarGUI extends Application
             board[r][c] = new Button("");
             board[r][c].setOnAction(new GridHandler());
             board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
-            board[r][c].setPrefWidth(120);
-            board[r][c].setPrefHeight(120);
+            board[r][c].setPrefWidth(80);
+            board[r][c].setPrefHeight(80);
             tempgrid.add(board[r][c],c,r);
          }
       }
@@ -146,22 +147,20 @@ public class MemoryGameVarGUI extends Application
    
    }
    
+         
+   
    ImageView[][] makeImageGrid(){
       
       ImageView[][] imagegrid = new ImageView [sizechoice][sizechoice];
       
       int img = 0;
-      int sizechoice = 3;
       int sc = sizechoice*sizechoice; //total amt of images needed
-      int schalf = sc/2; //for loop
-
+   
       List<Integer> imageorder = new ArrayList<>(sc); //makes list w pairs of number for board size
-      for (int i = 0; i < sc; i++){
-         if(i<schalf){
+      for(int x = 0; x<2; x++){
+         img = 0;
+         for (int i = 0; i < (sc/2); i++){
             img = i+1;
-            imageorder.add(img);
-         }else{
-            img = i-(schalf-1);
             imageorder.add(img);
          }
       } 
@@ -171,12 +170,12 @@ public class MemoryGameVarGUI extends Application
       for(int r=0;r<sizechoice;r++){ //makes grid w images from random numbers
          for(int c=0;c<sizechoice;c++){
             imagegrid[r][c] = new ImageView(new Image("file:"+imageorder.get(order)+".png"));
-            imagegrid[r][c].setFitWidth(100);
-            imagegrid[r][c].setFitHeight(100);
+            imagegrid[r][c].setFitWidth(60);
+            imagegrid[r][c].setFitHeight(60);
             order++;
          }
-       }
-       return(imagegrid);
+      }
+      return(imagegrid);
        
    }
    
@@ -194,10 +193,6 @@ public class MemoryGameVarGUI extends Application
       @Override
       public void handle(ActionEvent event)
       {
-      
-      ClckBtns = new Button[2];
-      WinBtns = new Button[sizechoice][sizechoice];
-      
          int row = 5;
          int column = 5;
          for(int r=0;r<sizechoice;r++){
@@ -208,50 +203,52 @@ public class MemoryGameVarGUI extends Application
                }
                
             }
-          }
+         }
           
-          board[row][column] = new Button("", images[row][column]); 
-          board[row][column].setPrefWidth(120);
-          board[row][column].setPrefHeight(120);
-          board[row][column].setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");     
-          grid.add(board[row][column],column,row); 
+         board[row][column] = new Button("", images[row][column]); 
+         board[row][column].setPrefWidth(80);
+         board[row][column].setPrefHeight(80);
+         board[row][column].setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");     
+         grid.add(board[row][column],column,row); 
+         clicks++;
+         clickdiv = clicks%2;
+         if(clickdiv==0){
+            for(int r=0;r<sizechoice;r++){
+               for(int c=0;c<sizechoice;c++){
+                  board[r][c] = null;
+               }}
+               
+               
+               
+               
+               
+         
+         }
+       
           
-          if (board[row][column] != ClckBtns[0]){
-          ClckBtns[0] = board[row][column];
-          }
-          else if(board[row][column] != ClckBtns[1]){
-          ClckBtns[1] = board[row][column];
-          }
-          
-          
-          
-          
-        
-        }
-
+       
+      }
+   
    }
    
-   
+   //function that flips over/resets board
    class ReverseButtonHandler implements EventHandler<ActionEvent>{
-   @Override
-   public void handle(ActionEvent event){
-   //when this button is pressed, any button in the clicked list will flip back over
-   for(int i=0; i<2; i++){
-   ClckBtns[i] = new Button("");
-   ClckBtns[i].setOnAction(new GridHandler());
-   ClckBtns[i].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
-   ClckBtns[i].setPrefWidth(120);
-   ClckBtns[i].setPrefHeight(120);
-
-   }
-   
-   
-   
-   }}
-   
-   
-   
-   
+      @Override
+      public void handle(ActionEvent event){
+      
+      //when this button is pressed, any button in the clicked list will flip back over
+         for(int r=0;r<sizechoice;r++){
+            for(int c=0;c<sizechoice;c++){
+               board[r][c] = new Button("");
+               board[r][c].setOnAction(new GridHandler());
+               board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
+               board[r][c].setPrefWidth(80);
+               board[r][c].setPrefHeight(80);
+               grid.add(board[r][c],c,r);}}
+      
+      
+      
+      }}
    
    class PlayButtonHandler implements EventHandler<ActionEvent>
    {
@@ -263,17 +260,17 @@ public class MemoryGameVarGUI extends Application
             sizechoice = 2; //2x2 board
          
          if (medium.isSelected())
-            sizechoice = 3; //3x3 board
+            sizechoice = 4; //3x3 board
          
          if (large.isSelected())
-            sizechoice = 4; //4x4 board
+            sizechoice = 6; //4x4 board
             
          grid = makeBoard(); //makes them for the correct size board
          images = makeImageGrid();
          
          vbox.getChildren().remove(sizestuff); //clearing scene of size choice
          vbox.getChildren().remove(spacer2);
-
+      
          spacer.setFont(Font.font("Helvetica",50));
          
          vbox.getChildren().add(grid); //adds everything for game to scene
@@ -281,9 +278,9 @@ public class MemoryGameVarGUI extends Application
          vbox.getChildren().add(flipcards);
          
        
-       }
+      }
        
-    }
+   }
 
 
 }
