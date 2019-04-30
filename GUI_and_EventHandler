@@ -1,5 +1,3 @@
-// the large grid still has the weird glitch where 
-// the bottom right picture flips over without being clicked
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -39,10 +37,10 @@ public class MemoryGameVarGUI extends Application
    VBox sizestuff;
    Label spacer;
    Label spacer2;
-   Button [] ClckBtns;
-   Button [][] WinBtns;
    int clicks;
    int clickdiv;
+   int [][] intboard;
+   int [] sendints;
    
    public static void main(String[] args)
    {
@@ -147,6 +145,24 @@ public class MemoryGameVarGUI extends Application
    
    }
    
+   
+   int [][] createIntBoard(){
+      
+      int total = (sizechoice * sizechoice) + 1;
+      int [][] temp = new int [sizechoice][sizechoice];
+      
+      int order = 1;
+      
+      for(int r=0;r<sizechoice;r++){
+         for(int c=0;c<sizechoice;c++){
+            temp[r][c] = order;
+            order++;
+         }
+      }
+       
+      return(temp);
+   }
+   
          
    
    ImageView[][] makeImageGrid(){
@@ -200,22 +216,31 @@ public class MemoryGameVarGUI extends Application
                if(event.getSource().equals(board[r][c])){
                   row = r;
                   column = c;
+                  
+                  
+                  
                }
                
             }
          }
+         clicks++;
+         clickdiv = clicks%2;
+         
+         if(clickdiv > 2){
+            int putint = (intboard[row][column]);
+            sendints[clickdiv - 1] = putint; 
+            }
           
          board[row][column] = new Button("", images[row][column]); 
          board[row][column].setPrefWidth(80);
          board[row][column].setPrefHeight(80);
          board[row][column].setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");     
          grid.add(board[row][column],column,row); 
-         clicks++;
-         clickdiv = clicks%2;
+         
          if(clickdiv==0){
             for(int r=0;r<sizechoice;r++){
                for(int c=0;c<sizechoice;c++){
-                  board[r][c] = null;
+                  board[r][c].setOnAction(null);
                }}
                
                
@@ -231,14 +256,20 @@ public class MemoryGameVarGUI extends Application
    
    }
    
-   //function that flips over/resets board
+   
    class ReverseButtonHandler implements EventHandler<ActionEvent>{
       @Override
       public void handle(ActionEvent event){
       
+      
+      
+         clicks = 0;
       //when this button is pressed, any button in the clicked list will flip back over
          for(int r=0;r<sizechoice;r++){
             for(int c=0;c<sizechoice;c++){
+            //if/elses to keep board here 
+            
+            
                board[r][c] = new Button("");
                board[r][c].setOnAction(new GridHandler());
                board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
@@ -264,7 +295,8 @@ public class MemoryGameVarGUI extends Application
          
          if (large.isSelected())
             sizechoice = 6; //4x4 board
-            
+         
+         intboard = createIntBoard(); 
          grid = makeBoard(); //makes them for the correct size board
          images = makeImageGrid();
          
@@ -280,7 +312,6 @@ public class MemoryGameVarGUI extends Application
        
       }
        
-   }
-
+   }   
 
 }
