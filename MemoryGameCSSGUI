@@ -1,0 +1,273 @@
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
+import javafx.scene.paint.Color; 
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.text.Font;
+import javafx.geometry.Insets;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import java.util.*;
+
+
+public class MemoryGameVarGUI extends Application
+{
+   GridPane grid;
+   ImageView [][] images;
+   Button [][] board;
+   Label resultLabel;
+   Button flipcards;
+   Label error;
+   int sizechoice;
+   private RadioButton small;
+   private RadioButton medium;
+   private RadioButton large;
+   VBox vbox;
+   VBox sizestuff;
+   Label spacer;
+   Label spacer2;
+   int [][] intboard;
+   
+   public static void main(String[] args)
+   {
+      // Launch the application.
+      launch(args);
+   }
+   
+   @Override
+   public void start(Stage stage)
+   {
+     
+      // label for choose board
+      Label promptLabel = new Label("WELCOME! CHOOSE YOUR BOARD SIZE.");
+      promptLabel.getStyleClass().add("prompt");
+      
+      // different size radio buttons
+      small = new RadioButton(" SMALL  (2x2) ");
+      small.getStyleClass().add("radiobutt");
+      
+      medium = new RadioButton("MEDIUM (4x4)");
+      medium.getStyleClass().add("radiobutt");
+      
+      large = new RadioButton(" LARGE  (6x6) ");
+      large.getStyleClass().add("radiobutt");
+      
+      // Add the choices to a ToggleGroup.
+      ToggleGroup radioGroup = new ToggleGroup();
+      small.setToggleGroup(radioGroup);
+      medium.setToggleGroup(radioGroup);
+      large.setToggleGroup(radioGroup);
+      
+      // button for size choice
+      Button playButton = new Button("PLAY!");
+      playButton.getStyleClass().add("miscbutt");
+      playButton.setOnAction(new PlayButtonHandler());
+      
+      // vbox with all of the size choice stuff
+      sizestuff = new VBox(promptLabel,small,medium,large,playButton);
+      sizestuff.setAlignment(Pos.CENTER);
+      sizestuff.getStyleClass().add("vbox");
+      sizestuff.setSpacing(40);
+      
+      //format and label stuff
+      
+      ImageView header = new ImageView("file:title.png");
+      
+      spacer = new Label(" \n ");
+      spacer.getStyleClass().add("spacer");
+      
+      error = new Label("  ");
+      error.getStyleClass().add("spacer");
+      
+      spacer2 = new Label("  ");
+      spacer2.getStyleClass().add("spacer");
+      
+      vbox = new VBox(header,spacer,sizestuff,spacer2);
+      vbox.setAlignment(Pos.CENTER);
+      vbox.getStyleClass().add("vbox");
+      
+      // button to flip images - don't have a handler yet
+      flipcards = new Button("FLIP CARDS");
+      flipcards.getStyleClass().add("miscbutt");
+      flipcards.setOnAction(new FlipButtonHandler());
+      
+      Scene scene = new Scene(vbox,800,1000); //create scene
+      
+      stage.setScene(scene); //set scene
+     
+      scene.getStylesheets().add("MemGame.css");
+     
+      stage.setTitle("Memory Game"); //set title
+      
+      stage.show(); //show window
+   }
+   
+   GridPane makeBoard(){
+   
+      // board made with sizes from radio buttons
+      GridPane tempgrid = new GridPane();
+      
+      tempgrid.setVgap(10);
+      tempgrid.setHgap(10);
+      tempgrid.setAlignment(Pos.CENTER);
+      
+      board = new Button [sizechoice][sizechoice];
+      for(int r=0;r<sizechoice;r++){
+         for(int c=0;c<sizechoice;c++){
+            board[r][c] = new Button("");
+            board[r][c].setOnAction(new GridHandler());
+            board[r][c].getStyleClass().add("boardbutt");
+            board[r][c].setPrefWidth(80);
+            board[r][c].setPrefHeight(80);
+            tempgrid.add(board[r][c],c,r);
+         }
+      }
+      
+      return tempgrid;
+   
+   }
+   
+   int [][] createIntBoard(){
+      
+      int total = (sizechoice * sizechoice) + 1;
+      int [][] temp = new int [sizechoice][sizechoice];
+      
+      int order = 1;
+      
+      for(int r=0;r<sizechoice;r++){
+         for(int c=0;c<sizechoice;c++){
+            temp[r][c] = order;
+            order++;
+         }
+       }
+       
+       return(temp);
+   }
+
+   ImageView[][] makeImageGrid(){
+      
+      ImageView[][] imagegrid = new ImageView [sizechoice][sizechoice];
+      
+      int img = 0;
+      int sc = sizechoice*sizechoice; //total amt of images needed
+
+      List<Integer> imageorder = new ArrayList<>(sc); //makes list w pairs of number for board size
+      for(int x = 0; x<2; x++){
+         img = 0;
+         for (int i = 0; i < (sc/2); i++){
+               img = i+1;
+               imageorder.add(img);
+         }
+      } 
+      Collections.shuffle(imageorder); //shuffles pairs to randomize
+      
+      int order = 0;
+      for(int r=0;r<sizechoice;r++){ //makes grid w images from random numbers
+         for(int c=0;c<sizechoice;c++){
+            imagegrid[r][c] = new ImageView(new Image("file:"+imageorder.get(order)+".png"));
+            imagegrid[r][c].setFitWidth(60);
+            imagegrid[r][c].setFitHeight(60);
+            order++;
+         }
+       }
+       return(imagegrid);
+       
+   }
+   
+   Label makeLabel(String s){
+   
+      Label templabel = new Label(s);
+      templabel.getStyleClass().add("prompt");
+      return templabel;
+   }
+   
+   class GridHandler implements EventHandler<ActionEvent>
+   // currently just replaces button with image behind it, nothing else
+   {
+      @Override
+      public void handle(ActionEvent event)
+      {
+         int row = 5;
+         int column = 5;
+         for(int r=0;r<sizechoice;r++){
+            for(int c=0;c<sizechoice;c++){
+               if(event.getSource().equals(board[r][c])){
+                  row = r;
+                  column = c;
+               }
+               
+            }
+          }
+          
+          board[row][column] = new Button("", images[row][column]); 
+          board[row][column].setPrefWidth(80);
+          board[row][column].setPrefHeight(80);
+          board[row][column].getStyleClass().add("imgbutt");   
+          grid.add(board[row][column],column,row); 
+          
+        
+        }
+
+   }
+   
+   class PlayButtonHandler implements EventHandler<ActionEvent>
+   {
+      @Override
+      public void handle(ActionEvent event)
+      {
+      
+         if (small.isSelected())
+            sizechoice = 2; //2x2 board
+         
+         if (medium.isSelected())
+            sizechoice = 4; //3x3 board
+         
+         if (large.isSelected())
+            sizechoice = 6; //4x4 board
+         
+         intboard = createIntBoard(); 
+         grid = makeBoard(); //makes them for the correct size board
+         images = makeImageGrid();
+         
+         vbox.getChildren().removeAll(sizestuff,spacer2); //clearing scene of size choice
+
+         spacer.getStyleClass().add("spacer");
+         
+         vbox.getChildren().addAll(grid,error,flipcards); //adds everything for game to scene
+       
+       }
+       
+    }
+    
+    class FlipButtonHandler implements EventHandler<ActionEvent>
+    {
+      @Override
+      public void handle(ActionEvent event)
+      {
+         for(int r=0;r<sizechoice;r++){
+         for(int c=0;c<sizechoice;c++){
+            board[r][c] = new Button("");
+            board[r][c].setOnAction(new GridHandler());
+            board[r][c].getStyleClass().add("boardbutt");
+            board[r][c].setPrefWidth(80);
+            board[r][c].setPrefHeight(80);
+            grid.add(board[r][c],c,r);
+         }
+      }
+
+      }
+   }
+
+
+}
