@@ -8,11 +8,11 @@ class MemoryGame implements Game{
    int turnCount=0; 
    String msg = "";
    String symbols [] = new String [8];
-   String symbol = String.valueOf(0);
+   String symbol = "";
    int rowIndex = 0;
    int colIndex = 0;
    int match = 0; 
-   int sc = 0;
+   int sc = 0; 
    List<Integer> boardnumbers = new ArrayList<>(sc); //makes list w pairs of number for board size
 
 
@@ -27,16 +27,15 @@ class MemoryGame implements Game{
    public int getTurnCount(){
       return(turnCount);}
 
-   public List<Integer> initializeBoard(int boardIndex){ 
-      for(int r = 0; r < boardIndex; r++){
+   public List<Integer> initializeGrid(int gridIndex){ 
+      for(int r = 0; r < gridIndex; r++){
       //row
-         for(int c = 0; c < boardIndex; c++){
+         for(int c = 0; c < gridIndex; c++){
          //col
             grid[c][r] = "[]"; 
          }
       }
-      sc = boardIndex * boardIndex;
-      anotherBoardIndex = boardIndex; 
+      sc = gridIndex * gridIndex;
       boardnumbers = new ArrayList<>(sc);
       return (boardnumbers);
     }
@@ -69,47 +68,43 @@ class MemoryGame implements Game{
    public boolean compareTo(){return false;} 
    //compare if the grid has the same symbols 
    
-   public int [][] shufflingBoard (){
-      for(int x = 0; x<2; x++){
-         for (int i = 0; i < (sc/2); i++){
+   public int [][] shufflingBoard (int boardChoice){
+      for(int x = 0; x<boardChoice; x++){
+         for (int i = 0; i < (sc/boardChoice); i++){
                boardnumbers.add(i);
          }
       } 
       Collections.shuffle(boardnumbers); //shuffles pairs to randomize
       
       int order = 0;
-      for(int r=0;r<sc;r++){ //makes grid w images from random numbers
-         for(int c=0;c<sc;c++){
+      for(int r=0;r<boardChoice;r++){ //makes grid w images from random numbers
+         for(int c=0;c<boardChoice;c++){
             board[r][c] = boardnumbers.get(order);;
             order++;
          }
        }
        
-       for(int r=0;r<sc;r++){ //makes grid w images from random numbers
-         for(int c=0;c<sc;c++){
-            System.out.print(board[r][c] + " ");
-         }
-         System.out.print("\n");
-       }
        return (board);
 }
    //return symbol and shuffling 
    
-   public int [][] takeTurn(int rowChoice, int colChoice, int boardChoice){
-      int num = board[rowChoice][colChoice]; 
+   public void displayGrid(int rowChoice, int colChoice, int boardChoice){
+      int anotherBoardIndex = board[rowChoice][colChoice];
+      symbol = String.valueOf(anotherBoardIndex); 
       grid[rowChoice][colChoice] = symbol;
       for(int r = 0; r < boardChoice; r++){
             //row
             for(int c = 0; c < boardChoice; c++){
          //col
-             System.out.print(board[r][c] + " ");
+             System.out.print(grid[r][c] + "");
             }
             System.out.println();
          }
          
-       return(board[row][col]);
    }
    //display hidden symbol in the grid 
+   
+   public String [][] takeTurn(int rowChoice, int colChoice, int boardChoice){return(grid);}
    
    public boolean checkWinner(){return false;} 
    //get if match == boardChoice/2 
