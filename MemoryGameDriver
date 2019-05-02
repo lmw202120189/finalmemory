@@ -15,18 +15,19 @@ class MemoryDriver{
   
      System.out.println("Choose your board [2x2] [4x4] [6x6] (Insert 2,4,6 only)"); 
      int boardChoice = input.nextInt();
+     mg.initializeGrid(boardChoice);
+     mg.printGrid(boardChoice);
      while(!mg.isWinner()&&mg.isValidInput(choice)&&mg.isValidBoard(boardChoice)){
-            mg.initializeBoard(boardChoice);
-            mg.printGrid(boardChoice);
+            mg.shufflingBoard(boardChoice);
             System.out.println("Now please choose the row of the symbols"); //guide
             System.out.println("Row: "); 
-            row = input.nextInt();
+            row = input.nextInt()-1;
             choice[0]=row;
             System.out.println("Now please choose the column of the symbols"); //guide
             System.out.println("Column: "); 
-            column = input.nextInt();
+            column = input.nextInt()-1;
             choice[1] = column;
-            //mg.takeTurn(choice);
+            mg.displayGrid(row,column,boardChoice);
             turn++; 
       } //while  
                 
