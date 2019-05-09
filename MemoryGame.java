@@ -16,43 +16,54 @@ class MemoryGame{
    int matchCount = 0;
    int turnCount = 1;
    boolean winner = false;
+   boolean boardInput = false;
    
    public void boardChoice(){
+      while (boardInput == false){
+         System.out.println("Board 1: 2*2 | Board 2: 4*4 | Board 3: 6*6");
+         System.out.println("Enter the number of the board you would like to play: ");
+         getBoardChoice = input.nextInt();
+         //go to 2*2 board
+        // System.out.println(getBoardChoice);
+         if (getBoardChoice == 1){
+            sizeChoice = 2;
+            //system.println(sizeChoice);
+            playBoard = playBoard(sizeChoice);
+            secretBoard = makeBoard(sizeChoice);
+            boardInput = true;
+         }   
+          //go to 4*4 board
+         else if (getBoardChoice == 2){
+            sizeChoice = 4;
+            //system.println(sizeChoice);
+            playBoard = playBoard(sizeChoice);
+            secretBoard = makeBoard(sizeChoice);
+            boardInput = true;
+         }     
+          //go to 6*6 board
+         else if (getBoardChoice == 3){ 
+            sizeChoice = 6;
+            //system.println(sizeChoice);
+            playBoard = playBoard(sizeChoice);
+            secretBoard = makeBoard(sizeChoice);
+            boardInput = true;
          
-      System.out.println("Board 1: 2*2 | Board 2: 4*4 | Board 3: 6*6");
-      System.out.println("Enter the number of the board you would like to play: ");
-      getBoardChoice = input.nextInt();
-      //go to 2*2 board
-     // System.out.println(getBoardChoice);
-      if (getBoardChoice == 1){
-         sizeChoice = 2;
-         //system.println(sizeChoice);
-         playBoard = playBoard(sizeChoice);
-         secretBoard = makeBoard(sizeChoice);
-      }   
-       //go to 4*4 board
-      else if (getBoardChoice == 2){
-         sizeChoice = 4;
-         //system.println(sizeChoice);
-         playBoard = playBoard(sizeChoice);
-         secretBoard = makeBoard(sizeChoice);
-      }     
-       //go to 6*6 board
-      else if (getBoardChoice == 3){ 
-         sizeChoice = 6;
-         //system.println(sizeChoice);
-         playBoard = playBoard(sizeChoice);
-         secretBoard = makeBoard(sizeChoice);      
-      } 
-      else{
-         System.out.println("You have to choose a valid board size!");
-      } 
+         } 
+         else{
+            System.out.println("You have to choose a valid board size!");
+            boardInput = false;
+            
+         } 
+        }
       int sc = sizeChoice*sizeChoice;
-      while(winner == false || turn <= sc){
+      
+      while(winner == false || turn <= sc && boardInput == true){
          System.out.println("Enter a row choice: ");
          getRow = input.nextInt();
+         getRow = getRow-1;
          System.out.println("Enter a column choice: ");
          getCol = input.nextInt();
+         getCol = getCol-1;
          takeTurn(getRow, getCol, sizeChoice, playBoard, secretBoard);
          turn++;  
       }
@@ -76,16 +87,16 @@ class MemoryGame{
             order++;
          }
       }     
-//     for(int r=0;r<sizeChoice;r++){ //for testing: checks if grid is randomized, take out before turning in
-//          for(int c=0;c<sizeChoice;c++){
-//             System.out.print(secretBoard[r][c] + " ");
-//          }
-//          System.out.print("\n");
-//       }
-       return secretBoard;
+   //     for(int r=0;r<sizeChoice;r++){ //for testing: checks if grid is randomized, take out before turning in
+   //          for(int c=0;c<sizeChoice;c++){
+   //             System.out.print(secretBoard[r][c] + " ");
+   //          }
+   //          System.out.print("\n");
+   //       }
+      return secretBoard;
    }
    public void createBoard(int sizeChoice){//set to 1 because we have 0 as place marker. 
-
+   
       int total = (sizeChoice * sizeChoice) + 1;
       int [][] temp = new int [sizeChoice][sizeChoice];
       int order = 1;
@@ -172,10 +183,10 @@ class MemoryGame{
       for(int r=0;r<sizeChoice;r++){ //checks winner
       
          for(int c=0;c<sizeChoice;c++){
-               if (playBoard[r][c] != secretBoard[rowChoice][colChoice] ){
-                  winner = false;
-                  return winner;  
-               }    
+            if (playBoard[r][c] != secretBoard[rowChoice][colChoice] ){
+               winner = false;
+               return winner;  
+            }    
          }
       }
    winner = true;
