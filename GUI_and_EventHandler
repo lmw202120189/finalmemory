@@ -41,6 +41,7 @@ public class MemoryGameVarGUI extends Application
    int clickdiv;
    int [][] intboard;
    int [] sendints;
+   int [] winInts;
    
    public static void main(String[] args)
    {
@@ -226,10 +227,13 @@ public class MemoryGameVarGUI extends Application
          clicks++;
          clickdiv = clicks%2;
          
+         //while(!isWinner())
          if(clickdiv > 2){
             int putint = (intboard[row][column]);
             sendints[clickdiv - 1] = putint; 
             }
+          //(takeTurn(sendInts[0], sendInts[1]);
+          //isValidInput();
           
          board[row][column] = new Button("", images[row][column]); 
          board[row][column].setPrefWidth(80);
@@ -240,10 +244,23 @@ public class MemoryGameVarGUI extends Application
          if(clickdiv==0){
             for(int r=0;r<sizechoice;r++){
                for(int c=0;c<sizechoice;c++){
+               //if (checkWinner()){
+               //if (sendInts[0] == intboard[r][c]){
+               // winInts[getTurnCount()] = intboard[r][c];
+               //
+               //}}
+               //for(int i = 0; i<winInts.length; i++){
+               // if(intboard[r][c] == winInts[i]);
+               //board[r][c]
+               //}
+               //else
                   board[r][c].setOnAction(null);
                }}
-               
-               
+               //}
+       
+          
+               //}
+              
                
                
                
