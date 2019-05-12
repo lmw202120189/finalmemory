@@ -14,6 +14,7 @@ class MemoryGame1{
    int sizeChoice = 0;
    int matchCount = 0;
    boolean match = false;
+   int turn = 0;
    int turnCount = 0;
    boolean winner = false;
    boolean boardInput = false;
@@ -71,8 +72,11 @@ class MemoryGame1{
          getCol = input.nextInt();
          getCol = getCol-1;
          takeTurn(getRow, getCol, sizeChoice, playBoard, secretBoard);
+         getTurn(turnCount);
          status(sizeChoice);
+         
       }
+      
    }  
    
                        
@@ -128,7 +132,7 @@ class MemoryGame1{
       playBoard[rowChoice][colChoice] = secretBoard[rowChoice][colChoice];
       hidden = playBoard[rowChoice][colChoice];
       addList(hidden);
-      
+      turnCount++;
           if(isMatch() == true){
          System.out.println("You found a match!"); 
          upDatedBoard(sizeChoice, playBoard);
@@ -150,12 +154,12 @@ class MemoryGame1{
          
          isWinner(sizeChoice);
        }
-       getTurn();
+       
     }  
     
-  public int getTurn(){
-   turnCount++; 
-   return turnCount;
+  public int getTurn(int turnCount){
+   turn = turnCount/2; 
+   return turn;
   } 
   //get turn++ 
    public List<Integer> addList (int hidden){
@@ -185,8 +189,9 @@ class MemoryGame1{
          matchList.clear();
          } //if it is a match then match++, check for winner, clear the list
       else{
+      matchList.clear();
       match = false;
-      matchList.clear();} 
+      } 
       
       }      
       
@@ -214,11 +219,11 @@ class MemoryGame1{
    public void status(int sizeChoice){
       
       if(isWinner(sizeChoice) == true){
-         System.out.println("Congrats! It took you: " + turnCount + " turns. With " + matchCount + " matches!");
+         System.out.println("Congrats! It took you: " + turn + " turns. With " + matchCount + " matches!");
       }
       else {
-         if(isWinner(sizeChoice) == false && turnCount <= sizeChoice*sizeChoice+(sizeChoice*2)){
-            System.out.println("On progress!" + "\n" + "Turns: " + turnCount + "\n" + "matches: " + matchCount);          
+         if(isWinner(sizeChoice) == false && turn <= sizeChoice*sizeChoice+(sizeChoice*2)){
+            System.out.println("On progress!" + "\n" + "Turns: " + turn + "\n" + "matches: " + matchCount);          
          }
          else{
             System.out.print("Ouch you lost :(. Don't give up!");
