@@ -1,5 +1,4 @@
-//big issue w the handler and the gamegame :(
-
+//so atm it's acting as though the memorygame i created doesnt exist
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -42,9 +41,9 @@ public class MemoryGameVarGUI extends Application
    Label spacer2;
    int clicks;
    int clickdiv;
-   int [][] intboard; //board of integers
-   int [] sendints; //ints to be sent to the game
-   int [] winInts; //the ints that are the "winning ints"
+   int [][] intboard;
+   int [] sendints;
+   int [] winInts;
    MemoryGame mg = new MemoryGame();
    
    public static void main(String[] args)
@@ -57,23 +56,19 @@ public class MemoryGameVarGUI extends Application
    public void start(Stage stage)
    {
      
-      // label for choose board
+       // label for choose board
       Label promptLabel = new Label("WELCOME! CHOOSE YOUR BOARD SIZE.");
-      promptLabel.setStyle("-fx-text-fill: #140005");
-      promptLabel.setFont(Font.font("Glacial Indifference", 35));
+      promptLabel.getStyleClass().add("prompt");
       
       // different size radio buttons
-      small = new RadioButton("SMALL (2x2)");
-      small.setStyle("-fx-text-fill: #D34C6E");
-      small.setFont(Font.font("Glacial Indifference", 25));
+      small = new RadioButton(" SMALL  (2x2) ");
+      small.getStyleClass().add("radiobutt");
       
       medium = new RadioButton("MEDIUM (4x4)");
-      medium.setStyle("-fx-text-fill: #D34C6E");
-      medium.setFont(Font.font("Glacial Indifference", 25));
+      medium.getStyleClass().add("radiobutt");
       
-      large = new RadioButton("LARGE (6x6)");
-      large.setStyle("-fx-text-fill: #D34C6E");
-      large.setFont(Font.font("Glacial Indifference", 25));
+      large = new RadioButton(" LARGE  (6x6) ");
+      large.getStyleClass().add("radiobutt");
       
       // Add the choices to a ToggleGroup.
       ToggleGroup radioGroup = new ToggleGroup();
@@ -83,42 +78,42 @@ public class MemoryGameVarGUI extends Application
       
       // button for size choice
       Button playButton = new Button("PLAY!");
-      playButton.setFont(Font.font("Glacial Indifference", 40));
-      playButton.setStyle("-fx-text-fill: #F4E1E6; -fx-background-color: #140005;-fx-background-radius: 0");
+      playButton.getStyleClass().add("miscbutt");
       playButton.setOnAction(new PlayButtonHandler());
       
       // vbox with all of the size choice stuff
       sizestuff = new VBox(promptLabel,small,medium,large,playButton);
       sizestuff.setAlignment(Pos.CENTER);
-      sizestuff.setStyle("-fx-background-color: #F4E1E6");
+      sizestuff.getStyleClass().add("vbox");
       sizestuff.setSpacing(40);
       
       //format and label stuff
       
       ImageView header = new ImageView("file:title.png");
       
-      spacer = new Label("  ");
-      spacer.setFont(Font.font("Helvetica",100)); 
+      spacer = new Label(" \n ");
+      spacer.getStyleClass().add("spacer");
       
       error = new Label("  ");
-      error.setFont(Font.font("Helvetica",35));
+      error.getStyleClass().add("spacer");
       
       spacer2 = new Label("  ");
-      spacer2.setFont(Font.font("Helvetica",100));
+      spacer2.getStyleClass().add("spacer");
       
       vbox = new VBox(header,spacer,sizestuff,spacer2);
       vbox.setAlignment(Pos.CENTER);
-      vbox.setStyle("-fx-background-color: #F4E1E6");
+      vbox.getStyleClass().add("vbox");
       
       // button to flip images - don't have a handler yet
-      ImageView flipimg = new ImageView("file:flip.png");
-      flipcards = new Button("",flipimg);
-      flipcards.setOnAction(new ReverseButtonHandler());
-      flipcards.setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");
+      flipcards = new Button("FLIP CARDS");
+      flipcards.getStyleClass().add("miscbutt");
+      flipcards.setOnAction(new FlipButtonHandler());
       
       Scene scene = new Scene(vbox,800,1000); //create scene
       
       stage.setScene(scene); //set scene
+     
+      scene.getStylesheets().add("MemGame.css");
      
       stage.setTitle("Memory Game"); //set title
       
@@ -203,13 +198,13 @@ public class MemoryGameVarGUI extends Application
    Label makeLabel(String s){
    
       Label templabel = new Label(s);
-      templabel.setTextFill(Color.web("#258EA6"));
-      templabel.setFont(Font.font("Didact Gothic",40));
+      templabel.getStyleClass().add("prompt");
       return templabel;
    }
    
    class GridHandler implements EventHandler<ActionEvent>
-   // currently just replaces button with image behind it, nothing else
+   //trying to make it so that if the images flipped match, that number is saved into a winning list
+   //then when the flip button is pressed, those winning buttons stay flipped u
    {
       @Override
       public void handle(ActionEvent event)
@@ -223,11 +218,11 @@ public class MemoryGameVarGUI extends Application
                   column = c;}
                
             }}//eventsource
-         board[row][column] = new Button("", images[row][column]); 
-         board[row][column].setPrefWidth(80);
-         board[row][column].setPrefHeight(80);
-         board[row][column].setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");     
-         grid.add(board[row][column],column,row); 
+          board[row][column] = new Button("", images[row][column]); 
+          board[row][column].setPrefWidth(80);
+          board[row][column].setPrefHeight(80);
+          board[row][column].getStyleClass().add("imgbutt");   
+          grid.add(board[row][column],column,row); 
          
          clicks++;
          clickdiv = clicks%2;
@@ -243,7 +238,7 @@ public class MemoryGameVarGUI extends Application
          if(clickdiv==0){
             for(int r=0;r<sizechoice;r++){
                for(int c=0;c<sizechoice;c++){
-               if (mg.checkWinner() && sendInts[0] == intboard[r][c]){
+               if (mg.checkWinner() && sendints[0] == intboard[r][c]){
                      winInts[mg.getTurnCount()] = intboard[r][c];
                         for(int i = 0; i<winInts.length; i++){
                            if(intboard[r][c] == winInts[i]);{
@@ -261,7 +256,7 @@ public class MemoryGameVarGUI extends Application
    }}
    
    
-   class ReverseButtonHandler implements EventHandler<ActionEvent>{
+   class FlipButtonHandler implements EventHandler<ActionEvent>{
       @Override
       public void handle(ActionEvent event){
       
@@ -274,25 +269,28 @@ public class MemoryGameVarGUI extends Application
                for(int l = 0; l<length.winInts; l++){
                if(board[r][c]== winInts[l]){
                
-               }
+               }//do nothing if its in winlist
                
                else{  
-               board[r][c] = new Button("");
-               board[r][c].setOnAction(new GridHandler());
-               board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
-               board[r][c].setPrefWidth(80);
-               board[r][c].setPrefHeight(80);
-               grid.add(board[r][c],c,r);
+                  for(int r=0;r<sizechoice;r++){
+                  for(int c=0;c<sizechoice;c++){
+                  board[r][c] = new Button("");
+                  board[r][c].setOnAction(new GridHandler());
+                  board[r][c].getStyleClass().add("boardbutt");
+                  board[r][c].setPrefWidth(80);
+                  board[r][c].setPrefHeight(80);
+                  grid.add(board[r][c],c,r);
                
-               }}
+               }}//replace button if not in winlist
                
-               }}
+               }//else
+               }//for item in winlist
+         
       
-      
-      
+      }}//for row n column
       }}//reverse button handler and handle
    
-   class PlayButtonHandler implements EventHandler<ActionEvent>
+      class PlayButtonHandler implements EventHandler<ActionEvent>
    {
       @Override
       public void handle(ActionEvent event)
@@ -311,16 +309,14 @@ public class MemoryGameVarGUI extends Application
          grid = makeBoard(); //makes them for the correct size board
          images = makeImageGrid();
          
-         vbox.getChildren().remove(sizestuff); //clearing scene of size choice
-         vbox.getChildren().remove(spacer2);
-      
-         spacer.setFont(Font.font("Helvetica",50));
+         vbox.getChildren().removeAll(sizestuff,spacer2); //clearing scene of size choice
+
+         spacer.getStyleClass().add("spacer");
          
-         vbox.getChildren().add(grid); //adds everything for game to scene
-         vbox.getChildren().add(error);
-         vbox.getChildren().add(flipcards);
-         
+         vbox.getChildren().addAll(grid,error,flipcards); //adds everything for game to scene
        
-      }}   //playbuttonhandler and handle
+       }
+       
+    }   //playbuttonhandler and handle
 
 }
