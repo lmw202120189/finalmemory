@@ -1,4 +1,5 @@
-//having an issue right now with parsing at the end, im trying to figure out my paranthesis
+//big issue w the handler and the gamegame :(
+
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -41,10 +42,10 @@ public class MemoryGameVarGUI extends Application
    Label spacer2;
    int clicks;
    int clickdiv;
-   int [][] intboard;
-   int [] sendints;
-   int [] winInts;
-   MemoryGame mg;
+   int [][] intboard; //board of integers
+   int [] sendints; //ints to be sent to the game
+   int [] winInts; //the ints that are the "winning ints"
+   MemoryGame mg = new MemoryGame();
    
    public static void main(String[] args)
    {
@@ -222,46 +223,41 @@ public class MemoryGameVarGUI extends Application
                   column = c;}
                
             }}//eventsource
-         clicks++;
-         clickdiv = clicks%2;
-         
-         while(!mg.isWinner()){
-         if(clickdiv > 2){
-            int putint = (intboard[row][column]);
-            sendints[clickdiv - 1] = putint;}
-            
-         mg.takeTurn(sendInts[0], sendInts[1]);
-         mg.isValidInput();
-          
          board[row][column] = new Button("", images[row][column]); 
          board[row][column].setPrefWidth(80);
          board[row][column].setPrefHeight(80);
          board[row][column].setStyle("-fx-background-color: #F4E1E6;-fx-background-radius: 0");     
          grid.add(board[row][column],column,row); 
          
+         clicks++;
+         clickdiv = clicks%2;
+         
+         if(!mg.isWinner()&& clickdiv>2){
+          int putint = (intboard[row][column]);
+          sendints[clickdiv - 1] = putint;
+            
+         mg.takeTurn(sendints[0], sendints[1]);
+         mg.isValidInput();}
+          
+         
          if(clickdiv==0){
             for(int r=0;r<sizechoice;r++){
                for(int c=0;c<sizechoice;c++){
-               if (mg.checkWinner()){
-               if (sendInts[0] == intboard[r][c]){
-               winInts[mg.getTurnCount()] = intboard[r][c];
+               if (mg.checkWinner() && sendInts[0] == intboard[r][c]){
+                     winInts[mg.getTurnCount()] = intboard[r][c];
+                        for(int i = 0; i<winInts.length; i++){
+                           if(intboard[r][c] == winInts[i]);{
+                              board[r][c] = intboard[r][c];
+                              }}
+               }//ifwinner and sendints
                
-               }
-               for(int i = 0; i<winInts.length; i++){
-               if(intboard[r][c] == winInts[i]);{
-                 board[r][c] = intboard[r][c];}
-               }
-               }
-               else{
-                  board[r][c].setOnAction(null);}
+                  else{
+                  board[r][c].setOnAction(null);}//else statement
                
-               
-       
-          
-               }}
-              
+              }}//row n column
              
    
+   }
    }}
    
    
@@ -275,13 +271,22 @@ public class MemoryGameVarGUI extends Application
          for(int r=0;r<sizechoice;r++){
             for(int c=0;c<sizechoice;c++){
             //if/elses to keep board here
-                 
+               for(int l = 0; l<length.winInts; l++){
+               if(board[r][c]== winInts[l]){
+               
+               }
+               
+               else{  
                board[r][c] = new Button("");
                board[r][c].setOnAction(new GridHandler());
                board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
                board[r][c].setPrefWidth(80);
                board[r][c].setPrefHeight(80);
-               grid.add(board[r][c],c,r);}}
+               grid.add(board[r][c],c,r);
+               
+               }}
+               
+               }}
       
       
       
