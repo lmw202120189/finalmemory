@@ -1,6 +1,6 @@
 import java.util.*;
-//DISCLAIMER: THIS IS NOT FINAL. ISSUES FIXED: GET MATCH, WINNING. 
-//NEED TO WORK ON: 2 PLAYERS 
+//DISCLAIMER: FINALIZED (SORT OFF). 
+//WITH 2 PLAYERS, AND EVERYTHING FIX BUT PLEASE DO TAKE ANOTHER LOOK BEFORE TURNING IT IN. 
 class MemoryGame1{
    //public static void main(String argv[]){
    //use scanner to take in the client input
@@ -20,12 +20,19 @@ class MemoryGame1{
    boolean boardInput = false;
    List<Integer> matchList = new ArrayList<Integer>(2);
    int hidden; 
+   Player player1 = new Player();
+   Player player2 = new Player();
+   String name1 = "";
+   String name2 = "";
    
-   MemoryGame1(){
-      
-   }
-   
-   public void boardChoice(){
+   public int boardChoice(){
+   System.out.println("Insert player 1's name: ");
+   name1 = input.next();
+   player1.getName(name1);
+   System.out.println("Insert player 2's name: "); 
+   name2 = input.next();
+   player2.getName(name2);
+
       while (boardInput == false){
          System.out.println("Board 1: 2*2 | Board 2: 4*4 | Board 3: 6*6");
          System.out.println("Enter the number of the board you would like to play: ");
@@ -63,8 +70,14 @@ class MemoryGame1{
          } 
         }
       int sc = sizeChoice*sizeChoice;
-      isWinner(sizeChoice);
+      isWinner();
       while(winner == false && boardInput == true && turnCount <= sizeChoice*sizeChoice+(sizeChoice*2)){
+         if(turn%2 == 0){
+            System.out.println("It's " + player1.getName(name1) + " 's turn"); 
+         }
+         else{
+            System.out.println("It's " + player2.getName(name2) + " 's turn"); 
+         }
          System.out.println("Enter a row choice: ");
          getRow = input.nextInt();
          getRow = getRow-1;
@@ -73,10 +86,10 @@ class MemoryGame1{
          getCol = getCol-1;
          takeTurn(getRow, getCol, sizeChoice, playBoard, secretBoard);
          getTurn(turnCount);
-         status(sizeChoice);
+         status();
          
       }
-      
+      return(sizeChoice);
    }  
    
                        
@@ -132,7 +145,7 @@ class MemoryGame1{
       playBoard[rowChoice][colChoice] = secretBoard[rowChoice][colChoice];
       hidden = playBoard[rowChoice][colChoice];
       addList(hidden);
-      turnCount++;
+      getTurnCount();
           if(isMatch() == true){
          System.out.println("You found a match!"); 
          upDatedBoard(sizeChoice, playBoard);
@@ -152,7 +165,7 @@ class MemoryGame1{
             upDatedBoard(sizeChoice, playBoard);
          }
          
-         isWinner(sizeChoice);
+         isWinner();
        }
        
     }  
@@ -162,13 +175,19 @@ class MemoryGame1{
    return turn;
   } 
   //get turn++ 
+  
+  public int getTurnCount(){
+   turnCount++;
+   return turnCount;
+  }
+  
    public List<Integer> addList (int hidden){
       matchList.add(hidden);      
       return matchList;
    } //add hidden in a list
    
    public void upDatedBoard(int sizeChoice, int [][] playBoard){
-      isWinner(sizeChoice);
+      isWinner();
       
       for(int r=0;r<sizeChoice;r++){ //makes grid w/ updated game play
          
@@ -185,7 +204,7 @@ class MemoryGame1{
       if(matchList.get(0).equals(matchList.get(1))){
          match = true;
          getMatchCount();
-         isWinner(sizeChoice);
+         isWinner();
          matchList.clear();
          } //if it is a match then match++, check for winner, clear the list
       else{
@@ -201,28 +220,46 @@ class MemoryGame1{
    
    public int getMatchCount(){
       matchCount++;
+      if(turn%2==0){
+         player1.getMatchesWon();
+      }
+      else{
+         player2.getMatchesWon();
+      }
       return matchCount; }
    //count for matches
    
-   public boolean isWinner (int sizeChoice){
+   public boolean isWinner (){
       int trueSize = sizeChoice*sizeChoice;
       if(matchCount == trueSize/2 && turnCount <= trueSize+(sizeChoice*2)){
          winner = true;
-         System.out.println("You won!");
-      }
+         System.out.println("Complete!");
+         compareMatches();}
       else{
          winner = false; 
          }
       return winner;
 } //check if win
 
-   public void status(int sizeChoice){
+   public void compareMatches(){
+   if(player1.getMatchesWon() > player2.getMatchesWon()){
+            System.out.println(player1.getName(name1) + " won! With turns: " + turn + " in total and matches " + player1.getMatchesWon());
+         }
+   else if (player1.getMatchesWon() < player2.getMatchesWon()){
+            System.out.println(player2.getName(name2) + " won! With turns: " + turn + " in total and matches " + player2.getMatchesWon());
+         }
+   else {
+            System.out.println("Drawn!");
+   }
+      }
+
+   public void status(){
       
-      if(isWinner(sizeChoice) == true){
-         System.out.println("Congrats! It took you: " + turn + " turns. With " + matchCount + " matches!");
+      if(isWinner() == true){
+         System.out.println("Complete! It took you: " + turn + " turns. With " + matchCount + " matches!");
       }
       else {
-         if(isWinner(sizeChoice) == false && turn <= sizeChoice*sizeChoice+(sizeChoice*2)){
+         if(isWinner() == false && turn <= sizeChoice*sizeChoice+(sizeChoice*2)){
             System.out.println("On progress!" + "\n" + "Turns: " + turn + "\n" + "matches: " + matchCount);          
          }
          else{
