@@ -1,0 +1,24 @@
+import java.util.*; 
+//DISCLAIMER: THIS IS JUST THE DRAFT NOT FINALS! AND IT WORKS! 
+//WORKING ON: 2 PLAYERS!
+class MemoryDriver1{
+   public static void main(String argv[]){
+   Scanner input = new Scanner(System.in); 
+   Instruction();
+   MemoryGame1 mg = new MemoryGame1(); 
+  
+     mg.boardChoice();
+    
+  
+     } //main  
+                
+ 
+   
+   static void Instruction(){
+   System.out.println("Welcome to Memory Driver edition!"); 
+   }
+   //intro
+   
+   
+}//class 
+   
