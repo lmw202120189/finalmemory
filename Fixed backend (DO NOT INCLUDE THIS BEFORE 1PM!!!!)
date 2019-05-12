@@ -171,16 +171,18 @@ class MemoryGame1{
       }
    }
    public boolean isMatch (){
-     matchCount = 0;
+     match = false;
      if(matchList.size()>1){
       if(matchList.get(0).equals(matchList.get(1))){
          match = true;
          getMatchCount();
          isWinner(sizeChoice);
+         matchList.clear();
          }
       else{
-      match = false;} 
-      matchList.clear();
+      match = false;
+      matchList.clear();} 
+      
       }      
       
       return match;
