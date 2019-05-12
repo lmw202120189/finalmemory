@@ -20,6 +20,10 @@ class MemoryGame1{
    List<Integer> matchList = new ArrayList<Integer>(2);
    int hidden; 
    
+   MemoryGame1(){
+      
+   }
+   
    public void boardChoice(){
       while (boardInput == false){
          System.out.println("Board 1: 2*2 | Board 2: 4*4 | Board 3: 6*6");
@@ -124,7 +128,7 @@ class MemoryGame1{
       playBoard[rowChoice][colChoice] = secretBoard[rowChoice][colChoice];
       hidden = playBoard[rowChoice][colChoice];
       addList(hidden);
-      getTurn();
+      
           if(isMatch() == true){
          System.out.println("You found a match!"); 
          upDatedBoard(sizeChoice, playBoard);
@@ -146,7 +150,7 @@ class MemoryGame1{
          
          isWinner(sizeChoice);
        }
-       
+       getTurn();
     }  
     
   public int getTurn(){
