@@ -12,10 +12,9 @@ class MemoryGame1{
    int [][] playBoard;
    int [][] secretBoard;
    int sizeChoice = 0;
-   int turn = 0;
    int matchCount = 0;
    boolean match = false;
-   int turnCount = 1;
+   int turnCount = 0;
    boolean winner = false;
    boolean boardInput = false;
    List<Integer> matchList = new ArrayList<Integer>(2);
@@ -60,7 +59,7 @@ class MemoryGame1{
         }
       int sc = sizeChoice*sizeChoice;
       isWinner(sizeChoice);
-      while(winner == false && boardInput == true){
+      while(winner == false && boardInput == true && turnCount <= sizeChoice*sizeChoice+(sizeChoice*2)){
          System.out.println("Enter a row choice: ");
          getRow = input.nextInt();
          getRow = getRow-1;
@@ -68,9 +67,11 @@ class MemoryGame1{
          getCol = input.nextInt();
          getCol = getCol-1;
          takeTurn(getRow, getCol, sizeChoice, playBoard, secretBoard);
-         turn++;  
+         status(sizeChoice);
       }
-   }                        
+   }  
+   
+                       
    public int [][] makeBoard(int sizeChoice){
          
       int[][] secretBoard = new int [sizeChoice][sizeChoice];
@@ -123,15 +124,15 @@ class MemoryGame1{
       playBoard[rowChoice][colChoice] = secretBoard[rowChoice][colChoice];
       hidden = playBoard[rowChoice][colChoice];
       addList(hidden);
-         
+      getTurn();
           if(isMatch() == true){
          System.out.println("You found a match!"); 
          upDatedBoard(sizeChoice, playBoard);
-         
       }
       else{
+      upDatedBoard(sizeChoice, playBoard);
          if (turnCount%2 == 0 && turnCount >= 2){
-         
+            System.out.println("Oops not a match!");
             for(int r=0;r<sizeChoice;r++){ //makes grid flipped back over
             
                for(int c=0;c<sizeChoice;c++){
@@ -140,17 +141,23 @@ class MemoryGame1{
                   }
                }
             }
+            upDatedBoard(sizeChoice, playBoard);
          }
-         upDatedBoard(sizeChoice, playBoard);
+         
          isWinner(sizeChoice);
        }
-      turnCount++;
-    }   
-   
+       
+    }  
+    
+  public int getTurn(){
+   turnCount++; 
+   return turnCount;
+  } 
+  //get turn++ 
    public List<Integer> addList (int hidden){
       matchList.add(hidden);      
       return matchList;
-   }
+   } //add hidden in a list
    
    public void upDatedBoard(int sizeChoice, int [][] playBoard){
       isWinner(sizeChoice);
@@ -172,7 +179,7 @@ class MemoryGame1{
          getMatchCount();
          isWinner(sizeChoice);
          matchList.clear();
-         }
+         } //if it is a match then match++, check for winner, clear the list
       else{
       match = false;
       matchList.clear();} 
@@ -185,19 +192,33 @@ class MemoryGame1{
    
    public int getMatchCount(){
       matchCount++;
-      System.out.println("Match: " + matchCount);
       return matchCount; }
    //count for matches
    
    public boolean isWinner (int sizeChoice){
       int trueSize = sizeChoice*sizeChoice;
-      if(matchCount < trueSize/2){
-         winner = false;
-      }
-      else{
-         winner = true; 
+      if(matchCount == trueSize/2 && turnCount <= trueSize+(sizeChoice*2)){
+         winner = true;
          System.out.println("You won!");
       }
+      else{
+         winner = false; 
+         }
       return winner;
-}
+} //check if win
+
+   public void status(int sizeChoice){
+      
+      if(isWinner(sizeChoice) == true){
+         System.out.println("Congrats! It took you: " + turnCount + " turns. With " + matchCount + " matches!");
+      }
+      else {
+         if(isWinner(sizeChoice) == false && turnCount <= sizeChoice*sizeChoice+(sizeChoice*2)){
+            System.out.println("On progress!" + "\n" + "Turns: " + turnCount + "\n" + "matches: " + matchCount);          
+         }
+         else{
+            System.out.print("Ouch you lost :(. Don't give up!");
+         }
+      }
+   }
 }
