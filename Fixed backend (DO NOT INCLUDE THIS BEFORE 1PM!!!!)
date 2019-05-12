@@ -1,6 +1,6 @@
 import java.util.*;
-//DISCLAIMER: NOT FINAL! FIXED ISSUE: MATCH
-
+//DISCLAIMER: THIS IS NOT FINAL. ISSUES FIXED: GET MATCH, WINNING. 
+//NEED TO WORK ON: 2 PLAYERS 
 class MemoryGame1{
    //public static void main(String argv[]){
    //use scanner to take in the client input
@@ -59,8 +59,8 @@ class MemoryGame1{
          } 
         }
       int sc = sizeChoice*sizeChoice;
-      
-      while(winner == false || turn <= sc && boardInput == true){
+      isWinner(sizeChoice);
+      while(winner == false && boardInput == true){
          System.out.println("Enter a row choice: ");
          getRow = input.nextInt();
          getRow = getRow-1;
@@ -129,9 +129,9 @@ class MemoryGame1{
       playBoard[rowChoice][colChoice] = secretBoard[rowChoice][colChoice];
       upDatedBoard(sizeChoice, playBoard);
       hidden = playBoard[rowChoice][colChoice];
-         matchList.add(hidden);
+      matchList.add(hidden);
 
-      if(isMatch(rowChoice, colChoice, sizeChoice, playBoard, secretBoard) == true){
+      if(isMatch() == true){
          System.out.println("You found a match!"); 
       }
       else{
@@ -147,12 +147,13 @@ class MemoryGame1{
             }
          }
          upDatedBoard(sizeChoice, playBoard);
-         isWinner(rowChoice, colChoice, sizeChoice, playBoard, secretBoard);
+         isWinner(sizeChoice);
        }
       turnCount++;
       return matchList;
    }
    public void upDatedBoard(int sizeChoice, int [][] playBoard){
+      isWinner(sizeChoice);
       
       for(int r=0;r<sizeChoice;r++){ //makes grid w/ updated game play
          
@@ -163,33 +164,38 @@ class MemoryGame1{
          System.out.print("\n");
       }
    }
-   public boolean isMatch (int rowChoice, int colChoice, int sizeChoice, int [][] playBoard, int [][] secretBoard){
+   public boolean isMatch (){
+     match = false;
      if(matchList.size()==2){
       for(int i = 0; i < matchList.size(); i++){
        for (int j = i; j < matchList.size(); j++){
          if(matchList.get(i) == matchList.get(j)){
-                  match = true; }
-          else{      
-         match = false;
-        }   
+                     match = true; }
+      
+            }
       }
-      }
-       
+      matchList.clear();
+      getMatchCount();
+      isWinner(sizeChoice); 
       }
       return match;
    }
-   public boolean isWinner (int rowChoice, int colChoice, int sizeChoice, int [][] playBoard, int [][] secretBoard){
-      
-      for(int r=0;r<sizeChoice;r++){ //checks winner
-      
-         for(int c=0;c<sizeChoice;c++){
-            if (playBoard[r][c] != secretBoard[rowChoice][colChoice] ){
-               winner = false;
-               return winner;  
-            }    
-         }
+   
+   public int getMatchCount(){
+      matchCount++;
+      System.out.println("Match: " + matchCount);
+      return matchCount; }
+   //count for matches
+   
+   public boolean isWinner (int sizeChoice){
+      int trueSize = sizeChoice*sizeChoice;
+      if(matchCount < trueSize/2){
+         winner = false;
       }
-   winner = true;
-   return winner;
-   }
+      else{
+         winner = true; 
+         System.out.println("You won!");
+      }
+      return winner;
+}
 }
