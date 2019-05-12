@@ -1,6 +1,5 @@
 import java.util.*; 
-//NOTE TO SELF: MAKE SURE TO CHANGE SOME OF THE FUNCTION
-//THIS IS JUST THE DRAFT NOT FINALS!!!!!! 
+//FINAL  
 class MemoryDriver1{
    public static void main(String argv[]){
    Scanner input = new Scanner(System.in); 
