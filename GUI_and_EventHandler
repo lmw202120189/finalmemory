@@ -1,3 +1,5 @@
+//having an issue right now with parsing at the end, im trying to figure out my paranthesis
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -42,6 +44,7 @@ public class MemoryGameVarGUI extends Application
    int [][] intboard;
    int [] sendints;
    int [] winInts;
+   MemoryGame mg;
    
    public static void main(String[] args)
    {
@@ -216,24 +219,19 @@ public class MemoryGameVarGUI extends Application
             for(int c=0;c<sizechoice;c++){
                if(event.getSource().equals(board[r][c])){
                   row = r;
-                  column = c;
-                  
-                  
-                  
-               }
+                  column = c;}
                
-            }
-         }
+            }}//eventsource
          clicks++;
          clickdiv = clicks%2;
          
-         //while(!isWinner())
+         while(!mg.isWinner()){
          if(clickdiv > 2){
             int putint = (intboard[row][column]);
-            sendints[clickdiv - 1] = putint; 
-            }
-          //(takeTurn(sendInts[0], sendInts[1]);
-          //isValidInput();
+            sendints[clickdiv - 1] = putint;}
+            
+         mg.takeTurn(sendInts[0], sendInts[1]);
+         mg.isValidInput();
           
          board[row][column] = new Button("", images[row][column]); 
          board[row][column].setPrefWidth(80);
@@ -244,49 +242,40 @@ public class MemoryGameVarGUI extends Application
          if(clickdiv==0){
             for(int r=0;r<sizechoice;r++){
                for(int c=0;c<sizechoice;c++){
-               //if (checkWinner()){
-               //if (sendInts[0] == intboard[r][c]){
-               // winInts[getTurnCount()] = intboard[r][c];
-               //
-               //}}
-               //for(int i = 0; i<winInts.length; i++){
-               // if(intboard[r][c] == winInts[i]);
-               //board[r][c]
-               //}
-               //else
-                  board[r][c].setOnAction(null);
+               if (mg.checkWinner()){
+               if (sendInts[0] == intboard[r][c]){
+               winInts[mg.getTurnCount()] = intboard[r][c];
+               
+               }
+               for(int i = 0; i<winInts.length; i++){
+               if(intboard[r][c] == winInts[i]);{
+                 board[r][c] = intboard[r][c];}
+               }
+               }
+               else{
+                  board[r][c].setOnAction(null);}
+               
+               
+       
+          
                }}
-               //}
-       
-          
-               //}
               
-               
-               
-               
-         
-         }
-       
-          
-       
-      }
+             
    
-   }
+   }}
    
    
    class ReverseButtonHandler implements EventHandler<ActionEvent>{
       @Override
       public void handle(ActionEvent event){
       
-      
-      
+            
          clicks = 0;
       //when this button is pressed, any button in the clicked list will flip back over
          for(int r=0;r<sizechoice;r++){
             for(int c=0;c<sizechoice;c++){
-            //if/elses to keep board here 
-            
-            
+            //if/elses to keep board here
+                 
                board[r][c] = new Button("");
                board[r][c].setOnAction(new GridHandler());
                board[r][c].setStyle("-fx-background-color: #D34C6E;-fx-background-radius: 0");
@@ -296,7 +285,7 @@ public class MemoryGameVarGUI extends Application
       
       
       
-      }}
+      }}//reverse button handler and handle
    
    class PlayButtonHandler implements EventHandler<ActionEvent>
    {
@@ -327,8 +316,6 @@ public class MemoryGameVarGUI extends Application
          vbox.getChildren().add(flipcards);
          
        
-      }
-       
-   }   
+      }}   //playbuttonhandler and handle
 
 }
