@@ -227,23 +227,24 @@ public class MemoryGameVarGUI extends Application
          clicks++;
          clickdiv = clicks%2;
          
-         if(!mg.isWinner()&& clickdiv>2){
+         if(!mg.isWinner() && clickdiv==0){
           int putint = (intboard[row][column]);
-          sendints[clickdiv - 1] = putint;
+          sendints[clickdiv] = putint;
             
          mg.takeTurn(sendints[0], sendints[1]);
          mg.isValidInput();}
-          
+          //send ints is the list which holds the ints that will be sent to the back end
+          //that way it will compare if they equal each other
+          //if they equal each other, then they will be put in winInts which is the list of winning integers
+         //aka the ones that were guessed correctly
+         //afterwards, in the flipButtonHandler, when the button is clicked it will check which ones are in the list
+         //that way they dont get flipped over
          
          if(clickdiv==0){
             for(int r=0;r<sizechoice;r++){
                for(int c=0;c<sizechoice;c++){
                if (mg.checkWinner() && sendints[0] == intboard[r][c]){
-                     winInts[mg.getTurnCount()] = intboard[r][c];
-                        for(int i = 0; i<winInts.length; i++){
-                           if(intboard[r][c] == winInts[i]);{
-                              board[r][c] = intboard[r][c];
-                              }}
+                     winInts[mg.getTurnCount() - 1] = intboard[r][c];
                }//ifwinner and sendints
                
                   else{
@@ -267,13 +268,12 @@ public class MemoryGameVarGUI extends Application
             for(int c=0;c<sizechoice;c++){
             //if/elses to keep board here
                for(int l = 0; l<length.winInts; l++){
-               if(board[r][c]== winInts[l]){
-               
-               }//do nothing if its in winlist
+               if(intboard[r][c]== winInts[l]){
+               board[r][c].setOnAction(null);
+               }//do nothing if its in winlist except null it.
                
                else{  
-                  for(int r=0;r<sizechoice;r++){
-                  for(int c=0;c<sizechoice;c++){
+                 
                   board[r][c] = new Button("");
                   board[r][c].setOnAction(new GridHandler());
                   board[r][c].getStyleClass().add("boardbutt");
@@ -281,7 +281,7 @@ public class MemoryGameVarGUI extends Application
                   board[r][c].setPrefHeight(80);
                   grid.add(board[r][c],c,r);
                
-               }}//replace button if not in winlist
+              //replace button if not in winlist
                
                }//else
                }//for item in winlist
