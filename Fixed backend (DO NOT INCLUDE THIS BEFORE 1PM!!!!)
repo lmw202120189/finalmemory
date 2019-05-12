@@ -180,6 +180,7 @@ class MemoryGame1{
          }
       else{
       match = false;} 
+      matchList.clear();
       }      
       
       return match;
