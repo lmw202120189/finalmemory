@@ -90,12 +90,6 @@ class MemoryGame1{
             order++;
          }
       }     
-   //for(int r=0;r<sizeChoice;r++){ //for testing: checks if grid is randomized, take out before turning in
-   //   for(int c=0;c<sizeChoice;c++){
-   //      System.out.print(secretBoard[r][c] + " ");
-   // }
-   //      System.out.print("\n");
-   // }
       return secretBoard;
    }
    public void createBoard(int sizeChoice){//set to 1 because we have 0 as place marker. 
