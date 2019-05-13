@@ -242,7 +242,7 @@ public class MemoryGameVarGUI extends Application
             for(int r=0;r<sizechoice;r++){
                for(int c=0;c<sizechoice;c++){
                if (sendints[0] == intboard[r][c]){
-                     winInts[mg.getTurnCount() - 1] = intboard[r][c];
+                     winInts[mg.getTurnCount()] = intboard[r][c];
                }//ifwinner and sendints
                
                   else{
