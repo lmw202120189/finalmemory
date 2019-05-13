@@ -1,195 +1,317 @@
 import java.util.*;
 
 class MemoryGame{
-   //public static void main(String argv[]){
-   //use scanner to take in the client input
-   Scanner input = new Scanner(System.in);
-   //MemoryGame game = new MemoryGame();
-   int getBoardChoice = 0;
-   int  getRow = 0;
-   int  getCol = 0;
-   int [][] playBoard;
+
+   String [][] playBoard;
    int [][] secretBoard;
-   int sizeChoice = 0;
-   int turn = 0;
-   boolean match = false;
-   int matchCount = 0;
-   int turnCount = 1;
-   boolean winner = false;
-   boolean boardInput = false;
+   boolean match;
+   int turncount;
+   boolean winner;
+   Player [] playerlist;
+   int sizechoice;
+   ArrayList<Integer> matched;
    
-   public void boardChoice(){
-      while (boardInput == false){
-         System.out.println("Board 1: 2*2 | Board 2: 4*4 | Board 3: 6*6");
-         System.out.println("Enter the number of the board you would like to play: ");
-         getBoardChoice = input.nextInt();
-         //go to 2*2 board
-        // System.out.println(getBoardChoice);
-         if (getBoardChoice == 1){
-            sizeChoice = 2;
-            //system.println(sizeChoice);
-            playBoard = playBoard(sizeChoice);
-            secretBoard = makeBoard(sizeChoice);
-            boardInput = true;
-         }   
-          //go to 4*4 board
-         else if (getBoardChoice == 2){
-            sizeChoice = 4;
-            //system.println(sizeChoice);
-            playBoard = playBoard(sizeChoice);
-            secretBoard = makeBoard(sizeChoice);
-            boardInput = true;
-         }     
-          //go to 6*6 board
-         else if (getBoardChoice == 3){ 
-            sizeChoice = 6;
-            //system.println(sizeChoice);
-            playBoard = playBoard(sizeChoice);
-            secretBoard = makeBoard(sizeChoice);
-            boardInput = true;
-         
-         } 
-         else{
-            System.out.println("You have to choose a valid board size!");
-            boardInput = false;
-            
-         } 
-        }
-      int sc = sizeChoice*sizeChoice;
-      
-      while(winner == false || turn <= sc && boardInput == true){
-         System.out.println("Enter a row choice: ");
-         getRow = input.nextInt();
-         getRow = getRow-1;
-         System.out.println("Enter a column choice: ");
-         getCol = input.nextInt();
-         getCol = getCol-1;
-         takeTurn(getRow, getCol, sizeChoice, playBoard, secretBoard);
-         turn++;  
-      }
-   }                        
-   public int [][] makeBoard(int sizeChoice){
-         
-      int[][] secretBoard = new int [sizeChoice][sizeChoice];
-      int sc = sizeChoice*sizeChoice; //total amt of numbers needed
-      List<Integer> boardNums = new ArrayList<>(sc); //makes list w pairs of number for board size
-      for(int x = 0; x<2; x++){
-         for (int i = 1; i <=(sc/2); i++){
-            boardNums.add(i);
-         }
-      } 
-      Collections.shuffle(boardNums); //shuffles pairs to randomize
-      
-      int order = 0;
-      for(int r=0;r<sizeChoice;r++){ //makes grid w images from random numbers
-         for(int c=0;c<sizeChoice;c++){
-            secretBoard[r][c] = boardNums.get(order);
-            order++;
-         }
-      }     
-   //     for(int r=0;r<sizeChoice;r++){ //for testing: checks if grid is randomized, take out before turning in
-   //          for(int c=0;c<sizeChoice;c++){
-   //             System.out.print(secretBoard[r][c] + " ");
-   //          }
-   //          System.out.print("\n");
-   //       }
-      return secretBoard;
+   public void setUp(){
+      //instructions();    use with driver
+      winner = false;
+      turncount = 0;
+      //playerlist = choosePlayerList();  use w driver
+      //sizechoice = chooseBoardSize();   use w driver
+      //showBoard();    use w driver
+      //setSecretBoard(sizechoice); use with driver
+      //setPlayBoard(sizechoice);   use with driver
+      matched = new ArrayList<Integer>();
+      matched.add(0); //so there's no null exception
    }
-   public void createBoard(int sizeChoice){//set to 1 because we have 0 as place marker. 
    
-      int total = (sizeChoice * sizeChoice) + 1;
-      int [][] temp = new int [sizeChoice][sizeChoice];
-      int order = 1;
-      for(int r=0;r<sizeChoice;r++){
-         
-         for(int c=0;c<sizeChoice;c++){
-            temp[r][c] = order;
-            order++;
-         }
-      }
-   }
-   public int [][] playBoard(int sizeChoice){//Game play starts at 1 and increases turn after 2 choices
+   public void takeTurn(int choice1, int choice2){
       
-      int[][] playBoard = new int [sizeChoice][sizeChoice];
-      for(int r=0;r<sizeChoice;r++){ //makes playing grid          
+      int toggle = turncount%2;
+      
+      boolean play = validInput(choice1,choice2);
+      
+      if(play == true){
          
-         for(int c=0;c<sizeChoice;c++){
-            playBoard[r][c] = 0;
-            System.out.print(playBoard[r][c] + " ");
+         //System.out.println("Let's see what your choices are!");
+         //showChoice(choice1, choice2);
+         match = checkMatch(choice1,choice2);
+         
+         if(match == false){
+            //System.out.println("Not a match. Let's flip them back over.");
+            //flipChoice(choice1, choice2);
+            //printBoard();
+         }else{
+            //System.out.println("That's a match! Congrats!");
+            matched.add(choice1);
+            matched.add(choice2);
+            playerlist[toggle].addMatch();
          }
-         System.out.print("\n");
-      }
-      return playBoard;
-   }
-   public void takeTurn(int rowChoice, int colChoice, int sizeChoice, int [][] playBoard, int [][] secretBoard){
-   
-      playBoard[rowChoice][colChoice] = secretBoard[rowChoice][colChoice];
-      upDatedBoard(sizeChoice, playBoard);
-      if(isMatch(rowChoice, colChoice, sizeChoice, playBoard, secretBoard) == true){
-         System.out.println("You found a match!"); 
-      }
-      else{
-         if (turnCount%2 == 0 && turnCount >= 2){
          
-            for(int r=0;r<sizeChoice;r++){ //makes grid flipped back over
-            
-               for(int c=0;c<sizeChoice;c++){
-                  if (playBoard[r][c] != 0 ){
-                     playBoard[r][c] = 0;
-                  }
-               }
+         checkWinner();
+         
+         turncount++;
+      }
+      
+   }
+      
+   
+   public void instructions(){
+      
+      System.out.println("Let's play a Memory Game!");
+      System.out.println("This is a two player game, where you try to match numbers.");
+      System.out.println("You will get to choose the size of the board you play on, and you can flip two cards at a time.");
+      System.out.println("The winner will be the player with the most matches at the end of the game. Good luck!!");
+  
+   }
+   
+   public Player [] choosePlayerList(){
+      
+      Scanner input = new Scanner(System.in);
+      
+      Player pone = new Player();
+      Player ptwo = new Player();
+      
+      System.out.println("\nWhat is player one's first name?");
+      String nameone = input.next();
+      System.out.println("Great. What is player two's first name?");
+      String nametwo = input.next();
+      
+      pone.setName(nameone);
+      ptwo.setName(nametwo);
+   
+      Player [] tempplayers = {pone, ptwo};
+   
+      return(tempplayers);
+      
+   }
+   
+   public void setPlayerList(String n1,String n2){
+      
+      Player p1 = new Player(n1);
+      Player p2 = new Player(n2);
+      
+      playerlist = new Player [2];
+      playerlist[0] = p1;
+      playerlist[1] = p2;
+      
+   }
+   
+   public Player [] getPlayerList(){
+      return(playerlist);
+   }     
+   
+   public int chooseBoardSize(){
+      
+      boolean valid = false;
+      
+      Scanner input = new Scanner(System.in);
+      
+      System.out.println("\nNow please choose your board size. You can play a 2x2 board, a 4x4 board, or a 6x6 board.");
+      System.out.println("Which one would you like? (2/4/6)");
+      
+      String tempchoice = input.next(); //doing this with strings so that there isn't green vomit if someone puts in turtles or something like that
+      
+      String [] validchoice = {"2","4","6"};
+      
+      do{
+         for(int i=0;i<3;i++){
+            if(tempchoice.equals(validchoice[i])){
+               valid = true;
             }
          }
-         upDatedBoard(sizeChoice, playBoard);
-         isWinner(rowChoice, colChoice, sizeChoice, playBoard, secretBoard);
-      }
-      turnCount++;
-   }
-   public void upDatedBoard(int sizeChoice, int [][] playBoard){
+         if(valid == false){
+            System.out.println("That is not a valid size. Please enter one of these options:");
+            System.out.println("    2, 4, or 6");
+            tempchoice = input.next();
+         }
+      } while(valid == false);
       
-      for(int r=0;r<sizeChoice;r++){ //makes grid w/ updated game play
-         
-         for(int c=0;c<sizeChoice;c++){
-           
-            System.out.print(playBoard[r][c] + " ");
+      int choice = Integer.parseInt(tempchoice);
+      
+      return(choice);
+   
+   }
+   
+   public void setBoardSize(int sc){
+      sizechoice = sc;
+   }
+   
+   public int getBoardSize(){
+      return(sizechoice);
+   }
+   
+   public void showBoard(){
+   
+      System.out.println("To take a turn, you will choose which two spaces on the board you would like to flip over.");
+      System.out.println("Here are the numbers that correspond with the spaces:");
+      
+      int visnum = 1;
+      
+      for(int r=0; r<sizechoice; r++){
+         for(int c=0; c<sizechoice; c++){
+            if(visnum<10){
+               System.out.print(visnum + "  ");
+            }else{
+               System.out.print(visnum + " ");
+            }
+            visnum++;
          }
          System.out.print("\n");
       }
-   }
-   public boolean isMatch (int rowChoice, int colChoice, int sizeChoice, int [][] playBoard, int [][] secretBoard){
       
-      for(int r=0;r<sizeChoice;r++){ //checks grid for matches
+    }
+    
+   public void setSecretBoard(int sc){
+    
+      secretBoard = new int [sc][sc];
+      int total = sc*sc; //total amt of numbers needed
+      List<Integer> boardNums = new ArrayList<>(total); //makes list w pairs of number for board size
       
-         for(int c=0;c<sizeChoice;c++){
-            if (playBoard[r][c] != 0 ){
-               if (playBoard[r][c] == playBoard[rowChoice][colChoice] ){
-                  matchCount++;   
-               }
-            }      
+      for(int x = 0; x<2; x++){
+        for (int i = 1; i <=(total/2); i++){
+           boardNums.add(i);
+        }
+      } 
+      
+      Collections.shuffle(boardNums); //shuffles pairs to randomize
+            
+      int order = 0;
+      for(int r=0;r<sc;r++){ //makes grid w images from random numbers
+        for(int c=0;c<sc;c++){
+           secretBoard[r][c] = boardNums.get(order);
+           order++;
          }
       }
-      System.out.println(matchCount);
-      if(matchCount == 3){
+      
+    }
+     
+   public int[][] getSecretBoard(){
+      return(secretBoard);
+    }   
+    
+   public void setPlayBoard(int sc){
+    
+      playBoard = new String[sc][sc];
+      
+      for(int r=0; r<sc; r++){
+         for(int c=0; c<sc; c++){
+            playBoard[r][c] = "#";
+         }
+      }
+   } 
+   
+   public boolean validInput(int c1,int c2){
+      
+      boolean valid = true;
+
+      int size = matched.size();
+         
+      for(int i=0;i<size;i++){
+         if(matched.get(i) == c1 || matched.get(i) == c2){
+            System.out.println("You already found the match for one of those spots!");
+            i = 100;
+            valid = false;
+         }
+      }
+       
+      if(c1 == c2){
+         System.out.println("You can't pick the same spot!");
+         valid = false;
+      }
+      
+      if(c1<1 || c2<1 || c1>(sizechoice*sizechoice) || c2>(sizechoice*sizechoice)){
+         System.out.println("One of your choices is out of bounds!");
+         valid = false;
+      }
+      
+      return(valid);
+   }
+   
+   public void showChoice(int choice1,int choice2){
+   
+      int rc1 = (choice1 - 1)/sizechoice; //row and column of choice 1
+      int cc1 = (choice1 - 1)%sizechoice;
+         
+      int rc2 = (choice2 - 1)/sizechoice; //row and column of choice 2
+      int cc2 = (choice2 - 1)%sizechoice;
+      
+      playBoard[rc1][cc1] = Integer.toString(secretBoard[rc1][cc1]);
+      playBoard[rc2][cc2] = Integer.toString(secretBoard[rc2][cc2]);
+      
+      for(int r=0; r<sizechoice; r++){
+         for(int c=0; c<sizechoice; c++){
+            System.out.print(playBoard[r][c] + " "); 
+         }
+         System.out.print("\n");
+      }
+      
+   }
+   
+   public void flipChoice(int choice1, int choice2){
+   
+      int rc1 = (choice1 - 1)/sizechoice; //row and column of choice 1
+      int cc1 = (choice1 - 1)%sizechoice;
+         
+      int rc2 = (choice2 - 1)/sizechoice; //row and column of choice 2
+      int cc2 = (choice2 - 1)%sizechoice;
+      
+      playBoard[rc1][cc1] = "#";
+      playBoard[rc2][cc2] = "#";
+      
+   }
+   
+   public void printBoard(){
+      
+      for(int r=0; r<sizechoice; r++){
+         for(int c=0; c<sizechoice; c++){
+            System.out.print(playBoard[r][c] + " "); 
+         }
+         System.out.print("\n");
+      }
+      
+   }
+   
+   public int getTurnCount(){
+      return(turncount);
+   }
+   
+   public boolean isWinner(){
+      return(winner);
+   }
+   
+   public void checkWinner(){
+      if((matched.size()-1) == sizechoice*sizechoice){
+         winner = true;
+      }
+   }
+   
+   public boolean checkMatch(int choice1, int choice2){
+      
+      int rc1 = (choice1 - 1)/sizechoice; //row and column of choice 1
+      int cc1 = (choice1 - 1)%sizechoice;
+         
+      int rc2 = (choice2 - 1)/sizechoice; //row and column of choice 2
+      int cc2 = (choice2 - 1)%sizechoice;
+      
+      boolean match = false;
+      
+      if(secretBoard[rc1][cc1] == secretBoard[rc2][cc2]){
          match = true;
-         matchCount = 0;
       }
-      else{      
-         match = false;
-      }
-      return match;
-   }
-   public boolean isWinner (int rowChoice, int colChoice, int sizeChoice, int [][] playBoard, int [][] secretBoard){
       
-      for(int r=0;r<sizeChoice;r++){ //checks winner
-      
-         for(int c=0;c<sizeChoice;c++){
-            if (playBoard[r][c] != secretBoard[rowChoice][colChoice] ){
-               winner = false;
-               return winner;  
-            }    
-         }
-      }
-   winner = true;
-   return winner;
+      return(match);
    }
+   
+   public ArrayList<Integer> getMatches(){
+      return(matched);
+   }
+   
 }
+
+         
+      
+      
+    
+       
+   
+   

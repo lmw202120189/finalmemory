@@ -8,6 +8,7 @@
     -fx-text-fill: #140005;
     -fx-font-family: "Glacial Indifference";
     -fx-font-size: 35px;
+    -fx-wrap-text: true;
 }
 
 .miscbutt {
