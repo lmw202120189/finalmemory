@@ -3,24 +3,21 @@ import java.util.*;
 class Player{
    private String name = "unknown";
    private int matches = 0;
-   private int gamesWon = 0;
-   private int [] guess = new int[2]; //the array is [rowchoice, columnchoice      
+    
    public String toString(){
       if(matches == 1){
          return(name + " has 1 match."); //break this up for grammatical sense
-      } else{return(name + " has " + gamesWon + " matches.");
+      } else{return(name + " has " + matches + " matches.");
       }
    }
     
    Player(){
       name = "unknown";
       matches = 0;
-      gamesWon = 0;
    }
    
-   Player(String n, int m){
+   Player(String n){
       name = n;
-      matches = m;
    }
    
    public String getName(){
@@ -29,14 +26,6 @@ class Player{
    
    public int getMatchesWon(){
       return(matches);
-   }
-   
-   public int getGamesWon(){
-      return(gamesWon);
-   }
-   
-   public int [] getGuess(){
-      return(guess);
    }
    
    public void setName(String n){
@@ -49,20 +38,6 @@ class Player{
    
    public void addMatch(){
       matches++;
-   }
-   
-   public void setGamesWon(int gw){
-      gamesWon = gw;
-   }
-   
-   public void addGameWon(){
-      gamesWon++;
-   }   
-   
-   public void setGuess(int row, int col){
-         guess[0] = row;
-         guess[1] = col;
-   }
-
+   }  
 
 }
